@@ -42,23 +42,6 @@ pipeline {
                 }
 
             }
-            post {
-                success {
-                    slackSend channel: '#general', color: 'good', message: "Процесс сборки фронтенда успешно завершен!"
-                }
-                failure {
-                    slackSend channel: '#general', color: 'danger', message: "Ошибка в процессе сборки фронта!"
-                }
-            }
         }   
-
-        
-        stage('Save artifacts') {
-            steps {
-                archiveArtifacts(artifacts: 'backend/target/sausage-store-0.0.1-SNAPSHOT.jar')
-                archiveArtifacts(artifacts: 'frontend/dist/frontend/*')
-                slackSend channel: '#general', color: 'good', message: 'артефыаsктsdsaыы сохранены'
-            }
-        }
     }
 }

@@ -1,9 +1,5 @@
 pipeline {
-    agent {
-        node {
-            label 'slave'
-        }
-    }
+    agent any
             
     triggers {
         pollSCM('H/5 * * * *') // Запускать будем автоматически по крону примерно раз в 5 минут
@@ -37,6 +33,7 @@ pipeline {
         stage('Build frontend') {
             steps {
                 dir("frontend") {   
+                    sh 'rm -rf node_modules'
                     sh 'npm install' // Для фронта сначала загрузим все сторонние зависимости
                     sh 'npm run build' // Запустим сборку  ЫЫЫЫААААА
                 }

@@ -33,7 +33,8 @@ pipeline {
         stage('Build frontend') {
             steps {
                 dir("frontend") {   
-                    sh 'rm -rf node_modules'
+                    sh 'npm config set registry https://registry.npmjs.org/'
+                    sh 'npm install @angular-devkit/core@^12.0.0'
                     sh 'npm install' // Для фронта сначала загрузим все сторонние зависимости
                     sh 'npm run build' // Запустим сборку  ЫЫЫЫААААА
                 }

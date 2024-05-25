@@ -4,10 +4,7 @@ pipeline {
             label 'slave'
         }
     }
-    environment {
-        slackChannel = '#jeni-jeni' // Укажите ваш канал Slack здесь
-        slackTokenCredentialId = 'slack-jenkins-token' // Укажите ID учетных данных для Slack
-    }        
+    
     triggers {
         pollSCM('H/5 * * * *') // Запускать будем автоматически по крону примерно раз в 5 минут
     }
@@ -28,11 +25,11 @@ pipeline {
 
             post {
                 success {
-                    slackSend channel: '#general', color: 'good', message: "Процеs сборки бекенда успешно завершен!"
+                    slackSend channel: '#jeni-jeni', color: 'good', message: "Процеs сборки бекенда успешно завершен!"
                     junit 'backend/target/surefire-reports/**/*.xml' // Передадим результаты тестов в Jenkins
                 }
                 failure {
-                    slackSend channel: '#general', color: 'danger', message: "Ошибка в процессе сборки бека!"
+                    slackSend channel: '#jeni-jeni', color: 'danger', message: "Ошибка в процессе сборки бека!"
                 }
             }
         }

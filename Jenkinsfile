@@ -5,15 +5,12 @@ pipeline {
         }
     }
     
-     
-    }
-    steps{
-        tools {
+    
+    tools {
         nodejs = 'node16'
         jdk = 'jdk16'
         maven = 'maven-3.8.1'
-        }
-    }    
+    }
     post {
         success {
             slackSend channel: '#general', color: 'good', message:
@@ -60,7 +57,5 @@ pipeline {
             }
         }
     }
-                  
-
-
+}
 

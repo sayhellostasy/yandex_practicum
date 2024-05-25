@@ -16,9 +16,9 @@ pipeline {
         stage("start proj + install tools"){
             steps {
                 tools {
-                    nodejs nodejs
-                    jdk jdk
-                    maven maven
+                    nodejs = nodejs
+                    jdk = jdk
+                    maven = maven
                 }
             }
                 

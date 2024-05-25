@@ -4,24 +4,17 @@ pipeline {
             label 'slave'
         }
     }
-    
+
+    triggers {
+        pollSCM('H/5 * * * *') // Запускать будем автоматически по крону примерно раз в 5 минут
+    }
     
     tools {
         nodejs = 'node16'
         jdk = 'jdk16'
         maven = 'maven-3.8.1'
     }
-    post {
-        success {
-            slackSend channel: '#general', color: 'good', message:
-                "началась новая сборка, tools will be instaled !"
-        }
-        failure {
-            slackSend channel: '#general', color: 'danger', message:
-                "началась новая сборка, instaled tools eroor, check logs !!"
-        }
-    }
-        
+ 
     stages {
         stage (' build + test backend'){
             steps {

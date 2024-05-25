@@ -40,8 +40,17 @@ pipeline {
                     sh 'npm install' // Для фронта сначала загрузим все сторонние зависимости
                     sh 'npm run build' // Запустим сборку  ЫЫЫЫААААА
                 }
-
-            }
+            }    
+            post {
+                success {
+                    slackSend channel: '#jeni-jeni', color: 'good', message: "Процеs сборки бекенда успешно завершен!"
+                    junit 'backend/target/surefire-reports/**/*.xml' // Передадим результаты тестов в Jenkins
+                }
+                failure {
+                    slackSend channel: '#jeni-jeni', color: 'danger', message: "Ошибка в процессе сборки бека!"
+                }
+            }    
+        
         }   
     }
 }

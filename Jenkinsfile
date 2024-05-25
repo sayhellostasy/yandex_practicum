@@ -4,7 +4,10 @@ pipeline {
             label 'slave'
         }
     }
-            
+    environment {
+        slackChannel = '#jeni-jeni' // Укажите ваш канал Slack здесь
+        slackTokenCredentialId = 'slack-jenkins-token' // Укажите ID учетных данных для Slack
+    }        
     triggers {
         pollSCM('H/5 * * * *') // Запускать будем автоматически по крону примерно раз в 5 минут
     }

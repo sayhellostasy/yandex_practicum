@@ -4,51 +4,44 @@ pipeline {
             label 'slave'
         }
     }
-
+            
     triggers {
         pollSCM('H/5 * * * *') // Запускать будем автоматически по крону примерно раз в 5 минут
     }
-    
+
     tools {
-        nodejs = 'node16'
-        jdk = 'jdk16'
-        maven = 'maven-3.8.1'
+        maven 'maven-3.8.1' // Для сборки бэкенда нужен Maven
+        jdk 'jdk16' // И Java Developer Kit нужной версии
+        nodejs 'node16' // А NodeJS нужен для фронтафффdasa
     }
- 
+
     stages {
-        stage (' build + test backend'){
+        stage('Build & Test backend') {
             steps {
-                dir(backend){
-                    sh 'mvn package'
+                dir("backend") { // Переходим в папку backend
+                    sh 'mvn package' // Собираем мавеном бэкенд
                 }
             }
-            
+
             post {
                 success {
                     slackSend channel: '#general', color: 'good', message: "Процесс сборки бекенда успешно завершен!"
-                    junit 'backend/target/surefire-reports/**/*.xml'
+                    junit 'backend/target/surefire-reports/**/*.xml' // Передадим результаты тестов в Jenkins
                 }
                 failure {
                     slackSend channel: '#general', color: 'danger', message: "Ошибка в процессе сборки бека!"
                 }
             }
         }
-        stage ('build frontend'){
+
+        stage('Build frontend') {
             steps {
-                dir(frontend){
-                    sh 'npm install'
-                    sh 'npm run build'
+                dir("frontend") {   
+                    sh 'npm install' // Для фронта сначала загрузим все сторонние зависимости
+                    sh 'npm run build' // Запустим сборку  ЫЫЫЫААААА
                 }
+
             }
-            post {
-                success{
-                    slackSend channel: '#general', color: 'good', message: "Процесс сборки фронтенда успешно завершен!"
-                }
-                failure {
-                    slackSend channel: '#general', color: 'danger', message: "Ошибка в процессе сборки фронтенда!"
-                }
-            }
-        }
+        }   
     }
 }
-

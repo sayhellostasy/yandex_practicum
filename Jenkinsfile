@@ -5,9 +5,6 @@ pipeline {
         }
     }
     environment {
-        nodejs = 'node16'
-        jdk = 'jdk16'
-        maven = 'maven-3.8.1'
         backend = 'backend'
         frontend = 'frontend'
     }
@@ -16,9 +13,9 @@ pipeline {
         stage("start proj + install tools"){
             steps {
                 tools {
-                    nodejs 
-                    jdk 
-                    maven 
+                    nodejs = 'node16'
+                    jdk = 'jdk16'
+                    maven = 'maven-3.8.1'
                 }
             }
                 

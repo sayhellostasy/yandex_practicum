@@ -25,7 +25,7 @@ pipeline {
 
             post {
                 success {
-                    slackSend channel: '#jeni-jeni', color: 'good', message: "Процеs сборки бекенда успешно заверше1н!"
+                    slackSend channel: '#jeni-jeni', color: 'good', message: "Процеs сборки бекенда успешно заверше1sн!"
                     junit 'backend/target/surefire-reports/**/*.xml' // Передадим результаты тестов в Jenkins
                 }
                 failure {

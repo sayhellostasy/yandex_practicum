@@ -25,7 +25,7 @@ pipeline {
     stages {
         stage('Install Dependencies') {
             steps {
-                sh 'sudo apt install pip'
+                sh 'apt install pip'
                 sh 'pip install decorator' // Установка недостающего модуля Python
             }
         }

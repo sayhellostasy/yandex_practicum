@@ -1,7 +1,8 @@
 pipeline {
     agent {
-        node {
-            label 'slave'
+        docker {
+            image 'mcr.microsoft.com/azure-cli'
+            args '-u root' // Запускать контейнер от имени root
         }
     }
     

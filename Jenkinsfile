@@ -53,56 +53,14 @@ pipeline {
 
             
         }
-          stage('Deploy Staging') {
-      steps {
-            azureWebAppPublish appName: "middleware-jeni-jeni",
-            azureCredentialsId: "azure-app",
-            publishType: "file",
-            filePath: "backend/target/your-app.war",
-            resourceGroup: "jeni-jeni"
-      }
+        stage('Deploy Staging') {
+            steps {
+                azureWebAppPublish appName: "middleware-jeni-jeni",
+                azureCredentialsId: "azure-app",
+                publishType: "file",
+                filePath: "backend/target/your-app.war",
+                resourceGroup: "jeni-jeni"
+            }
+        }
     }
-    stage("Approval") {
-        steps {
-            emailext (
-                    attachLog: true,
-                    subject: "Waiting for your Approval! Job: '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                    mimeType: 'text/html',
-                    body: """<p>STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-                                <p>Job has completed dev/test successfully and deployed to Staging! Please go to this link and Approve the build to promote to production. </br><a href='${env.BUILD_URL}/input'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a></p>""",
-                    recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-            )
-            script {
-                def userInput = false
-                userInput = input(id: 'Proceed1', message: 'Promote to Production?', parameters: [[$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Please confirm you agree with this!']])
-                echo 'userInput: ' + userInput
-
-                if(userInput == true) {
-                    // do action
-                } else {
-                    // not do action
-                    echo "Action was aborted."
-                }
-            }    
-        }  
-    }
-
-    stage('Deploy Prod') {
-      steps {
-          sh 'echo "Deploying to Production"'
-          //emailext attachLog: true, body: "${currentBuild.currentResult}: Job ${env.JOB_NAME}, build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}", recipientProviders: [[$class: 'CulpritsRecipientProvider']], subject: "Jenkins Build - ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
-            azureWebAppPublish appName: "middleware-jeni-jeni-prod",
-            azureCredentialsId: "azure-app",
-            publishType: "file",
-            filePath: "**/*.*",
-            resourceGroup: "jeni-jeni"
-      }
-    }
-  }
-  post {
-        always {
-            echo 'Deployed to Production'
-            emailext attachLog: true, body: "${currentBuild.currentResult}: Job ${env.JOB_NAME}, build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}", recipientProviders: [[$class: 'CulpritsRecipientProvider']], subject: "Jenkins Build - ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
-    }
-  }
-} 
+}  

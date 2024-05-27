@@ -20,8 +20,8 @@ pipeline {
         stage('install Azure CLI'){
             steps{
                 sh '''
-                sudo apt-get install -y python3-pip
-                sudo apt-get install -y gcc musl-dev python3-dev libffi-dev libssl-dev cargo make
+                apt-get install -y python3-pip
+                apt-get install -y gcc musl-dev python3-dev libffi-dev libssl-dev cargo make
                 pip install --upgrade pip
                 pip install azure-cli
                 '''

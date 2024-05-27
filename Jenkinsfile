@@ -55,9 +55,10 @@ pipeline {
         }
           stage('Deploy Staging') {
       steps {
-            azureWebAppPublish appName: "middleware-staging",
+            azureWebAppPublish appName: "middleware-jeni-jeni",
+            azureCredentialsId: "azure-app",
             publishType: "file",
-            filePath: "",
+            filePath: "backend/target/your-app.war",
             resourceGroup: "jeni-jeni"
       }
     }

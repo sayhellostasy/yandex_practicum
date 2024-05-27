@@ -1,8 +1,7 @@
 pipeline {
     agent {
-        docker {
-            image 'mcr.microsoft.com/azure-cli'
-            args '-u root' // Запускать контейнер от имени root
+        node {
+            label 'slave'
         }
     }
     
@@ -23,7 +22,16 @@ pipeline {
         jdk 'jdk16' // И Java Developer Kit нужной версии
         nodejs 'node16' // А NodeJS нужен для фронтафффdasa
     }
-    stages{
+    stages {
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    docker.image('mcr.microsoft.com/azure-cli').inside('-u root') {
+                        sh 'pip install decorator' // Установка недостающего модуля Python
+                    }
+                }
+            }
+        }
         stage('Build & Test backend') {
             steps {
                 dir("backend") { // Переходим в папку backend

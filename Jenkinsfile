@@ -46,7 +46,8 @@ pipeline {
         stage('Build & Test backend') {
             steps {
                 dir("backend") { // Переходим в папку backend
-                    sh 'mvn package' // Собираем мавеном бэкенд
+                    sh 'mvn clean package' 
+                     // Собираем мавеном бэкенд
                 }
             }
 

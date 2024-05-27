@@ -38,7 +38,7 @@ pipeline {
                     junit 'backend/target/surefire-reports/**/*.xml' // Передадим результаты тестов в Jenkins
                 }
                 failure {
-                    slackSend channel: '#jeni-jeni', color: 'danger', message: "Ошибка в процессе сборки бэкенда!"
+                    slackSend channel: '#jeni-jeni', color: 'danger', message: "Ошибка в процессе сборки бэкендоа!"
                 }
             }
         }

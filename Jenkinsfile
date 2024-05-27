@@ -19,9 +19,10 @@ pipeline {
     stages {
         stage('Install Dependencies') {
             steps {
-                sh '''
-                docker run --rm -u root mcr.microsoft.com/azure-cli pip install decorator
-                '''
+                script {
+                    sh '/usr/bin/docker run --rm -u root mcr.microsoft.com/azure-cli pip install decorator'
+
+                }
             }
         }
 

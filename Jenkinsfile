@@ -10,6 +10,9 @@ pipeline {
     }
 
     environment {
+        RESOURCE_GROUP = 'jeni-jeni' // Название группы ресурсов Azure
+        WEBAPP_NAME = 'jeni-jeni-app' // Название веб-приложения в Azure
+        MIDDLEWARE_APP_NAME = 'middleware-jeni-jeni' // Название промежуточног
         AZ_CLI_HOME = "${env.WORKSPACE}/.azure-cli" // Директория для установки Azure CLI
         PATH = "${env.AZ_CLI_HOME}/bin:${env.PATH}" // Добавляем Azure CLI в PATH
     }
@@ -79,12 +82,13 @@ pipeline {
         }
         stage('Deploy Staging') {
             steps {
-                azureWebAppPublish appName: "middleware-jeni-jeni",
-                azureCredentialsId: "azure-app",
-                publishType: "file",
-                filePath: "backend/target/your-app.war",
-                resourceGroup: "jeni-jeni"
+                withCredentials([azureServicePrincipal(credentialsId: 'azure-app', subscriptionIdVariable: 'SUBSCRIPTION_ID', clientIdVariable: 'CLIENT_ID', clientSecretVariable: 'CLIENT_SECRET', tenantIdVariable: 'TENANT_ID')]) {
+                    sh '''
+                    az login --service-principal -u $CLIENT_ID -p $CLIENT_SECRET --tenant $TENANT_ID
+                    az webapp deployment source config-zip -g $RESOURCE_GROUP -n $MIDDLEWARE_APP_NAME --src backend/target/your-app.war
+                    '''
+                }
             }
         }
     }
-}  
+}      

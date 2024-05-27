@@ -85,7 +85,7 @@ pipeline {
                 withCredentials([azureServicePrincipal(credentialsId: 'azure-app', subscriptionIdVariable: 'SUBSCRIPTION_ID', clientIdVariable: 'CLIENT_ID', clientSecretVariable: 'CLIENT_SECRET', tenantIdVariable: 'TENANT_ID')]) {
                     sh '''
                     az login --service-principal -u $CLIENT_ID -p $CLIENT_SECRET --tenant $TENANT_ID
-                    az webapp deployment source config-zip -g $RESOURCE_GROUP -n $MIDDLEWARE_APP_NAME --src backend/target/your-app.war
+                    az webapp deployment source config-zip -g $RESOURCE_GROUP -n $MIDDLEWARE_APP_NAME --src backend/target/
                     '''
                 }
             }

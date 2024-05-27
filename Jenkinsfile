@@ -16,7 +16,7 @@ pipeline {
         MIDDLEWARE_APP_NAME = 'middleware-jeni-jeni' // Название вашего промежуточного приложения в Azure
         MIDDLEWARE_PROD_NAME = 'middleware-jeni-jeni-prod' // Название вашего промежуточного продукта в Azure
     }
-    
+
     tools {
         maven 'maven-3.8.1' // Для сборки бэкенда нужен Maven
         jdk 'jdk16' // И Java Developer Kit нужной версии
@@ -62,44 +62,35 @@ pipeline {
         }   
         stage('Deploy to Middleware App') {
             steps {
-                script {
-                    // Логин в Azure с использованием учетных данных из Jenkins Credentials
-                    withCredentials([azureServicePrincipal(credentialsId: 'azure-app', subscriptionIdVariable: 'SUBSCRIPTION_ID', clientIdVariable: 'CLIENT_ID', clientSecretVariable: 'CLIENT_SECRET', tenantIdVariable: 'TENANT_ID')]) {
-                        sh "az login --service-principal -u ${CLIENT_ID} -p ${CLIENT_SECRET} --tenant ${TENANT_ID}"
-                        
-                        // Публикация артефакта в промежуточное приложение в Azure
-                        sh "az webapp deployment source config-zip -g ${RESOURCE_GROUP} -n ${MIDDLEWARE_APP_NAME} --src backend/target/your-app.war"
-                    }
+                withCredentials([azureServicePrincipal(credentialsId: 'azure-app', subscriptionIdVariable: 'SUBSCRIPTION_ID', clientIdVariable: 'CLIENT_ID', clientSecretVariable: 'CLIENT_SECRET', tenantIdVariable: 'TENANT_ID')]) {
+                    sh """
+                    az login --service-principal -u \$CLIENT_ID -p \$CLIENT_SECRET --tenant \$TENANT_ID
+                    az webapp deployment source config-zip -g $RESOURCE_GROUP -n $MIDDLEWARE_APP_NAME --src backend/target/your-app.war
+                    """
                 }
             }
         }
         
         stage('Deploy to Middleware Prod') {
             steps {
-                script {
-                    // Логин в Azure с использованием учетных данных из Jenkins Credentials
-                    withCredentials([azureServicePrincipal(credentialsId: 'azure-app', subscriptionIdVariable: 'SUBSCRIPTION_ID', clientIdVariable: 'CLIENT_ID', clientSecretVariable: 'CLIENT_SECRET', tenantIdVariable: 'TENANT_ID')]) {
-                        sh "az login --service-principal -u ${CLIENT_ID} -p ${CLIENT_SECRET} --tenant ${TENANT_ID}"
-                        
-                        // Публикация артефакта в промежуточный продукт в Azure
-                        sh "az webapp deployment source config-zip -g ${RESOURCE_GROUP} -n ${MIDDLEWARE_PROD_NAME} --src backend/target/your-app.war"
-                    }
+                withCredentials([azureServicePrincipal(credentialsId: 'azure-app', subscriptionIdVariable: 'SUBSCRIPTION_ID', clientIdVariable: 'CLIENT_ID', clientSecretVariable: 'CLIENT_SECRET', tenantIdVariable: 'TENANT_ID')]) {
+                    sh """
+                    az login --service-principal -u \$CLIENT_ID -p \$CLIENT_SECRET --tenant \$TENANT_ID
+                    az webapp deployment source config-zip -g $RESOURCE_GROUP -n $MIDDLEWARE_PROD_NAME --src backend/target/your-app.war
+                    """
                 }
             }
         }
         
         stage('Deploy to Azure') {
             steps {
-                script {
-                    // Логин в Azure с использованием учетных данных из Jenkins Credentials
-                    withCredentials([azureServicePrincipal(credentialsId: 'azure-app', subscriptionIdVariable: 'SUBSCRIPTION_ID', clientIdVariable: 'CLIENT_ID', clientSecretVariable: 'CLIENT_SECRET', tenantIdVariable: 'TENANT_ID')]) {
-                        sh "az login --service-principal -u ${CLIENT_ID} -p ${CLIENT_SECRET} --tenant ${TENANT_ID}"
-                        
-                        // Публикация артефакта (например, WAR файла) в Azure App Service
-                        sh "az webapp deployment source config-zip -g ${RESOURCE_GROUP} -n ${WEBAPP_NAME} --src backend/target/your-app.war"
-                    }
+                withCredentials([azureServicePrincipal(credentialsId: 'azure-app', subscriptionIdVariable: 'SUBSCRIPTION_ID', clientIdVariable: 'CLIENT_ID', clientSecretVariable: 'CLIENT_SECRET', tenantIdVariable: 'TENANT_ID')]) {
+                    sh """
+                    az login --service-principal -u \$CLIENT_ID -p \$CLIENT_SECRET --tenant \$TENANT_ID
+                    az webapp deployment source config-zip -g $RESOURCE_GROUP -n $WEBAPP_NAME --src backend/target/your-app.war
+                    """
                 }
             }
         }
     }
-}    
+}

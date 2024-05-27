@@ -9,6 +9,10 @@ pipeline {
         pollSCM('H/5 * * * *') // Запускать будем автоматически по крону примерно раз в 5 минут
     }
 
+    environment {
+        AZ_CLI_HOME = "${env.WORKSPACE}/.azure-cli" // Директория для установки Azure CLI
+        PATH = "${env.AZ_CLI_HOME}/bin:${env.PATH}" // Добавляем Azure CLI в PATH
+    }
     tools {
         maven 'maven-3.8.1' // Для сборки бэкенда нужен Maven
         jdk 'jdk16' // И Java Developer Kit нужной версии

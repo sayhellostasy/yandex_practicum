@@ -22,8 +22,12 @@ pipeline {
         jdk 'jdk16' // И Java Developer Kit нужной версии
         nodejs 'node16' // А NodeJS нужен для фронтафффdasa
     }
-
     stages {
+        stage('Install Dependencies') {
+            steps {
+                sh 'pip install decorator' // Установка недостающего модуля Python
+            }
+        }
         stage('Build & Test backend') {
             steps {
                 dir("backend") { // Переходим в папку backend

@@ -16,15 +16,17 @@ pipeline {
         nodejs 'node16' // NodeJS нужной версии для фронтенда
     }
 
-    stages('install Azure CLI'){
-        steps{
-            sh '''
-            apk add py3-pip
-            apk add gcc musl-dev python3-dev libffi-dev openssl-dev cargo make
-            pip install --upgrade pip
-            pip install azure-cli
-            '''
-        }
+    stages{
+        stage('install Azure CLI'){
+            steps{
+                sh '''
+                apk add py3-pip
+                apk add gcc musl-dev python3-dev libffi-dev openssl-dev cargo make
+                pip install --upgrade pip
+                pip install azure-cli
+                '''
+            }
+        }   
     
     
         stage('Build & Test backend') {

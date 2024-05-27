@@ -16,6 +16,26 @@ pipeline {
     }
 
     stages {
+        stage('Install Azure CLI') {
+            steps {
+                sh '''
+                # Убедитесь, что pip установлен
+                if ! command -v pip &> /dev/null; then
+                    echo "pip не установлен. Устанавливаем pip..."
+                    curl -sS https://bootstrap.pypa.io/get-pip.py | python3
+                fi
+
+                # Создаем директорию для установки Azure CLI
+                mkdir -p ${AZ_CLI_HOME}
+
+                # Устанавливаем Azure CLI в пользовательское окружение
+                pip install --user azure-cli
+
+                # Проверяем установку
+                az --version
+                '''
+            }
+        }
         stage('Build & Test backend') {
             steps {
                 dir("backend") { // Переходим в папку backend

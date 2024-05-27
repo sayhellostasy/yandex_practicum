@@ -16,16 +16,7 @@ pipeline {
         nodejs 'node16' // NodeJS нужной версии для фронтенда
     }
 
-    stages {
-        stage('Install Dependencies') {
-            steps {
-                script {
-                    sh '/usr/bin/docker run --rm -u root mcr.microsoft.com/azure-cli pip install decorator'
-
-                }
-            }
-        }
-
+    stages
         stage('Build & Test backend') {
             steps {
                 dir("backend") { // Переходим в папку backend

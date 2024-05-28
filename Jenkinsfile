@@ -78,18 +78,13 @@ pipeline {
                     slackSend channel: '#jeni-jeni', color: 'danger', message: "Ошибка в про7цессе сборки бека!"
                 }
             }    
-
-            
         }
-        stage('Deploy Staging') {
+        stage('Save artifacts') {
             steps {
-                withCredentials([azureServicePrincipal(credentialsId: 'azure-app', subscriptionIdVariable: 'SUBSCRIPTION_ID', clientIdVariable: 'CLIENT_ID', clientSecretVariable: 'CLIENT_SECRET', tenantIdVariable: 'TENANT_ID')]) {
-                    sh '''
-                    az login --service-principal -u $CLIENT_ID -p $CLIENT_SECRET --tenant $TENANT_ID
-                    az webapp deployment source config-zip -g $RESOURCE_GROUP -n $MIDDLEWARE_APP_NAME --src backend/target/
-                    '''
-                }
-            }
+                archiveArtifacts(artifacts: 'backend/target/sausage-store-0.0.1-SNAPSHOT.jar')
+                archiveArtifacts(artifacts: 'frontend/dist/frontend/*')
+            }    
         }
+        
     }
 }      
